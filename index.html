@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Budget App</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+
+<body >
+    <div>
+        <div style="text-align: center; color: rgb(5, 97, 5);">
+            <h1>BUDGET AAP</h1>
+        </div>
+        <form action="" class="d-flex  justify-content-around ">
+           
+            <div class="card mt-5 border border-warning" style="width: 30rem;margin-left: 20px;">
+                <div class="card-body">
+                    <label for="totalBudget" class="form-label">Please enter your Budget</label>
+                    <input type="number" class="form-control border border-info" id="totalBudget" aria-describedby="emailHelp">
+                </div>
+            </div>
+            <div class="card mt-5 border border-warning" style="width: 30rem;margin-left: 20px;">
+                <div class="card-body">
+                    <label for="expenseName" class="form-label">Please enter your expense Name</label>
+                    <input type="text" class="form-control border border-info" id="expenseName" aria-describedby="emailHelp">
+                    <label for="expenseAmount" class="form-label">Please enter your expense Amount</label>
+                    <input type="number" class="form-control border border-info" id="expenseAmount" aria-describedby="emailHelp">
+                    <button type="button" class="btn btn-secondary mt-4" id="addExpense">Add expenses</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="d-flex mt-5 ms-3">
+        <div style="margin-left: 300px;">
+            <h5>Budget</h5>
+            <i class="fa-solid fa-money-bill fa-lg text-success mt-4" style="font-size:40px;"></i>
+            <p style="margin-top: 20px;" id="totalBudgetDisplay">$0.00</p>
+
+        </div>
+        <div style="margin-left: 200px;">
+            <h5>Expense budget</h5>
+            <i class="fa-solid fa-money-check fa-lg text-success mt-4 " style="font-size:40px; margin-left: 30px;"></i>
+            <p style=" margin-left: 30px; margin-top: 20px;" id="totalExpensesDisplay">$0.00</p>
+        </div>
+        <div style="margin-left: 200px;">
+            <h5>Balance</h5>
+            <i class="fa-solid fa-dollar-sign fa-lg text-success mt-4 " style="font-size:40px; margin-left: 30px;"></i>
+            <p style=" margin-left: 30px; margin-top: 20px; " id="remainingBalanceDisplay">$0.00</p>
+        </div>
+    </div>
+    <div style="margin-left: 300px;">
+        <h4>Expenses</h4>
+        <ul id="expenselist"></ul>
+    </div>
+
+    <script>
+        const totalBudgetInput = document.getElementById("totalBudget");
+        const expenseNameInput = document.getElementById("expenseName");
+        const expenseAmountInput = document.getElementById("expenseAmount");
+        const addExpenseButton = document.getElementById("addExpense");
+
+        const totalBudgetDisplay = document.getElementById("totalBudgetDisplay");
+        const totalExpensesDisplay = document.getElementById("totalExpensesDisplay");
+        const remainingBalanceDisplay = document.getElementById("remainingBalanceDisplay");
+        const expenseList = document.getElementById("expenselist");
+
+        let budget = 0;
+        let expenses = [];
+
+        function handleBudgetInput() {
+            budget = parseFloat(totalBudgetInput.value);
+            updateBalance();
+        }
+
+        totalBudgetInput.addEventListener("input", handleBudgetInput);
+
+        addExpenseButton.addEventListener("click", handleAddExpense);
+
+        function handleAddExpense() {
+            const name = expenseNameInput.value;
+            const amount = parseFloat(expenseAmountInput.value);
+
+            if (name && amount) {
+                expenses.push({ name, amount });
+                expenseNameInput.value = "";
+                expenseAmountInput.value = "";
+                updateExpensesList();
+                updateBalance();
+            } else {
+                alert("Please enter a valid expense name and amount");
+            }
+        }
+
+        function updateBalance() {
+            let totalExpenses = 0;
+            for (let i = 0; i < expenses.length; i++) {
+                totalExpenses += expenses[i].amount;
+            }
+
+            let remainingBalance = budget - totalExpenses;
+
+            totalBudgetDisplay.textContent = "$" + budget.toFixed(2);
+            totalExpensesDisplay.textContent = "$" + totalExpenses.toFixed(2);
+            remainingBalanceDisplay.textContent = "$" + remainingBalance.toFixed(2);
+        }
+
+        function updateExpensesList() {
+            expenseList.innerHTML = "";
+            expenses.forEach(expense => {
+                const li = document.createElement("li");
+                li.textContent = expense.name + ": $" + expense.amount.toFixed(2);
+                expenseList.appendChild(li);
+            });
+        }
+    </script>
+
+</body>
+
+</html>
